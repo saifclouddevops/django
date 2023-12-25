@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  # PostgreSQL database service
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: salik
+      POSTGRES_USER: salik
+      POSTGRES_PASSWORD: salik
+    ports:
+      - "5432:5432"
+
+  # Django application service
+  web:
+    image: newdjango
+    container_name: django_app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django_central-development:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+
+
+  # pgAdmin service
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mdsaifsalik@yahoo.com
+      PGADMIN_DEFAULT_PASSWORD: salik
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
